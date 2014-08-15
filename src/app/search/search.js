@@ -1,3 +1,5 @@
+
+
 angular.module( 'ngBoilerplate.search', [
     'ui.router',
     'placeholders',
@@ -18,30 +20,24 @@ angular.module( 'ngBoilerplate.search', [
         });
     })
 
-    .controller( 'SearchCtrl', function SearchCtrl( $scope , BookService, $location, detailsService) {
+    .controller( 'SearchCtrl', function SearchCtrl( $scope, BookService, $location, detailsService ) {
 
         $scope.searchTerm = "Angular js";
 
         $scope.doSearch = function () {
-            BookService.get({ q: $scope.searchTerm }, function (response) {
+            BookService.search($scope.searchTerm).then(function(response) {
                 $scope.bookResults = response.items;
                 $scope.orderProp = 'volumeInfo.title';
-                console.log(response);
             });
-        };
-
-        $scope.changeView = function(item){
-
-            detailsService.values = item;
-
-            var name = item.volumeInfo.title.replace(/\s/g , "-");
-            var url = 'details/' + name;
-            $location.path(url);
         };
     })
 
     .factory('BookService', function ($resource) {
-        return $resource('https://www.googleapis.com/books/v1/volumes',
+        var books = {
+            cached: []
+        };
+
+        books.api = $resource('https://www.googleapis.com/books/v1/volumes',
             {
                 maxResults: '10',
                 callback: 'JSON_CALLBACK',
@@ -52,5 +48,14 @@ angular.module( 'ngBoilerplate.search', [
                     method: 'JSONP'
                 }
             });
+
+        books.search = function(term) {
+            return books.api.get({ q: term }).$promise.then(function (response) {
+                books.cached = response.items;
+                return response; // by returning response as it was passed into this function, the controller can use this promise too, as it does above
+            });
+        };
+
+        return books;
     })
 ;
