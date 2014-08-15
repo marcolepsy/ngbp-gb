@@ -7,6 +7,7 @@ angular.module('ngBoilerplate.detailsService', [])
     .service('detailsService', function(){
         this.values = {};
         this.sayHello = function(text){
-            return this.values.volumeInfo.title;
+            var vals = this.values.volumeInfo;
+            return vals;
         };
     });

@@ -19,8 +19,8 @@
             </thead>
             <tbody>
             <tr ng-repeat="item in bookResults">
-                <td><a ng-href="{{item.volumeInfo.infoLink}}" target="_blank"><img ng-src="{{item.volumeInfo.imageLinks.smallThumbnail}}" /></a></td>
-                <td><a ng-click="changeView(item)"  >{{item.volumeInfo.title}}</a><br />
+                <td><a href="" ng-click="changeView(item)"><img ng-src="{{item.volumeInfo.imageLinks.smallThumbnail}}" /></a></td>
+                <td><a href="" ng-click="changeView(item)">{{item.volumeInfo.title}}</a><br />
                     By: {{item.volumeInfo.authors}}<br />
                     Published: {{item.volumeInfo.publisher}}, {{item.volumeInfo.publishedDate}}
                 </td>
